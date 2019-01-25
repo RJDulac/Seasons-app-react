@@ -10,7 +10,8 @@ class App extends React.Component {
     //only time we directly assign state
     this.state = {
       //property/value
-      lat: null
+      lat: null,
+      errorMessage: ""
     };
     window.navigator.geolocation.getCurrentPosition(
       //first callback -success callback
@@ -19,13 +20,21 @@ class App extends React.Component {
         this.setState({ lat: position.coords.latitude });
       },
       //second callback -when failed to find location
-      err => console.log(err)
+      err => {
+        this.setState({ errorMessage: err.message });
+      }
     );
   }
   render() {
     //react says we have to define render. Otherwise we get an error
-
-    return <div>Lattitude: {this.state.lat}</div>;
+    //conditional rendering
+    if (this.state.errorMessage && !this.state.lat) {
+      return <div>Error: {this.state.errorMessage}</div>;
+    }
+    if (!this.state.errorMessage && this.state.lat) {
+      return <div>Latitude: {this.state.lat}</div>;
+    }
+    return <div>Loading!</div>;
   }
 }
 
