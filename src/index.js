@@ -29,8 +29,8 @@ class App extends React.Component {
       err => this.setState({ errorMessage: err.message })
     );
   }
-  render() {
-    //react says we have to define render. Otherwise we get an error
+  //avoid having multiple return statments in render method - put in helper function
+  renderContent() {
     //conditional rendering
     if (this.state.errorMessage && !this.state.lat) {
       return <div>Error: {this.state.errorMessage}</div>;
@@ -39,8 +39,11 @@ class App extends React.Component {
       //passing state in a prop
       return <SeasonDisplay lat={this.state.lat} />;
     }
-    return <Spinner />;
+    return <Spinner message="Please accept location request" />;
+  }
+  render() {
+    //react says we have to define render. Otherwise we get an error
+    return <div>{this.renderContent()}</div>;
   }
 }
-
 ReactDOM.render(<App />, document.querySelector("#root"));
